@@ -1,0 +1,41 @@
+body {
+	background-color: black;
+}
+#item-list {
+	display: grid;
+	grid-template-columns: repeat(3,calc(30% - 8px));
+	grid-column-gap: 16px;
+  grid-row-gap: 16px;
+}
+@media (max-width: 900px) {
+	#item-list {
+		display: block;
+	}
+}
+a {
+	text-decoration: none;
+	color: white;
+}
+ul {
+	margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+li {
+	list-style: none;
+}
+
+article {
+	background-color: black;
+	width: 360px;
+	text-align: center;
+	margin: auto;
+}
+img {
+	margin-left: auto;
+}
+p {
+	padding: 10px;
+}
