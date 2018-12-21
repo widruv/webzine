@@ -1,0 +1,38 @@
+import requests
+from bs4 import BeautifulSoup
+from yattag import Doc
+
+r = requests.get('https://sitesearch.asahi.com/sitesearch/index.php?Keywords=%E6%96%B0%E5%9E%A3%E7%B5%90%E8%A1%A3&sort=1&iref=pc_ss_score')
+bs = BeautifulSoup(r.text, 'html.parser')
+ul = bs.find('ul', {'id':'SiteSearchResult'})
+data = [] 
+for item in ul:
+    a = item.find('a')
+    if a == -1:
+        continue
+
+    link = a['href']
+    image_span = a.find('span', {'class':'Image'})
+    image = "http:" + image_span.find('img')['src']
+    headline = a.find('span', {'class': 'SearchResult_Headline'}).find('em')
+    data.append({'head': headline.get_text(), 'image': image, 'link': link})
+    
+doc, tag, text = Doc().tagtext()
+
+with tag('html', lang='ja'):
+    with tag('head'):
+        doc.asis('<meta charset="utf-8">')
+        doc.asis('<meta http-equiv="Content-Type", content="text/html; charset=euc-jp">')
+        doc.asis('<link rel="stylesheet" type="text/css" href="article.css">')
+    with tag('body'):
+        for item in data:
+            with tag('article'):
+                with tag('h1'):
+                    with tag('a', href=item['link'].encode('utf-8')):
+                        text(item['head'].encode('utf-8'))
+                    with tag('a', href=item['link'].encode('utf-8')):
+                        doc.stag('img', src=item['image'].encode('utf-8'), height='175', width='145')
+
+
+
+
